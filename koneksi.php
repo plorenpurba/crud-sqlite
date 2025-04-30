@@ -20,5 +20,17 @@ class Database{
             header('Location: /');
             exit();
         }
+        else{
+            $sql = $conn->prepare("SELECT * FROM tugas WHERE id = :id");
+            $sql->bindParam(':id', $id, PDO::PARAM_INT);
+            $sql->execute();
+            
+        }
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+    function delete($d){
+        $sql = "DELETE FROM tugas WHERE id = ". $d;
+        $sql->exec($sql);
+    }
+    
 }
