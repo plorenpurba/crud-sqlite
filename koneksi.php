@@ -1,46 +1,60 @@
 <?php
-try{
-    $conn = new \PDO('sqlite:./database.db');
-}catch(\PDOException $e){
+try {
+    $conn = new PDO('sqlite:./database.db');
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
     echo $e->getMessage();
 }
 
-class Database{
-    function create ($tugas, $waktu){
-        $sql = "INSERT INTO tugas (deskripsi, waktu) VALUES('$tugas','$waktu')";
-        $conn->exec($sql);
+class Database {
+    private $conn;
+
+    public function __construct($connection) {
+        $this->conn = $connection;
     }
-    function showTugas (){
+
+    public function create($tugas, $waktu) {
+        $sql = "INSERT INTO tugas (deskripsi, waktu) VALUES (:tugas, :waktu)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':tugas', $tugas);
+        $stmt->bindParam(':waktu', $waktu);
+        return $stmt->execute();
+    }
+
+    public function showTugas() {
         $sql = "SELECT * FROM tugas";
-        $conn->exec($sql);
-        return $sql->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->conn->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    function showTugasDariID ($id){
-        if(!$id){
+
+    public function showTugasDariID($id) {
+        if (!$id) {
             header('Location: /');
             exit();
         }
-        else{
-            $sql = $conn->prepare("SELECT * FROM tugas WHERE id = :id");
-            $sql->bindParam(':id', $id, PDO::PARAM_INT);
-            $sql->execute();
-            
-        }
+        $sql = $this->conn->prepare("SELECT * FROM tugas WHERE id = :id");
+        $sql->bindParam(':id', $id, PDO::PARAM_INT);
+        $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
-    function delete($d){
-        $sql = "DELETE FROM tugas WHERE id = ". $d;
-        $sql->exec($sql);
+
+    public function delete($id) {
+        $sql = $this->conn->prepare("DELETE FROM tugas WHERE id = :id");
+        $sql->bindParam(':id', $id, PDO::PARAM_INT);
+        return $sql->execute();
     }
-    function updateTugas($id, $deskripsi, $waktu){
-        if (empty($deskripsi) || empty($waktu)){
-            header('Location: /'); 
+
+    public function updateTugas($id, $deskripsi, $waktu) {
+        if (empty($deskripsi) || empty($waktu)) {
+            header('Location: /');
             exit();
         }
-        $sql = $conn->prepare("UPDATE tugas SET deskripsi = :deskripsi, waktu = :waktu WHERE id = :id");
+        $sql = $this->conn->prepare("UPDATE tugas SET deskripsi = :deskripsi, waktu = :waktu WHERE id = :id");
         $sql->bindParam(':deskripsi', $deskripsi);
-        $sql->bindParam(':waktu', $waktu, PDO::PARAM_INT);
+        $sql->bindParam(':waktu', $waktu);
         $sql->bindParam(':id', $id, PDO::PARAM_INT);
         return $sql->execute();
     }
 }
+
+$db = new Database($conn);
