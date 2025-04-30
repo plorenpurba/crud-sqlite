@@ -32,5 +32,15 @@ class Database{
         $sql = "DELETE FROM tugas WHERE id = ". $d;
         $sql->exec($sql);
     }
-    
+    function updateTugas($id, $deskripsi, $waktu){
+        if (empty($deskripsi) || empty($waktu)){
+            header('Location: /'); 
+            exit();
+        }
+        $sql = $conn->prepare("UPDATE tugas SET deskripsi = :deskripsi, waktu = :waktu WHERE id = :id");
+        $sql->bindParam(':deskripsi', $deskripsi);
+        $sql->bindParam(':waktu', $waktu, PDO::PARAM_INT);
+        $sql->bindParam(':id', $id, PDO::PARAM_INT);
+        return $sql->execute();
+    }
 }
