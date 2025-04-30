@@ -15,4 +15,10 @@ class Database{
         $conn->exec($sql);
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+    function showTugasDariID ($id){
+        if(!$id){
+            header('Location: /');
+            exit();
+        }
+    }
 }
