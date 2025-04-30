@@ -10,4 +10,9 @@ class Database{
         $sql = "INSERT INTO tugas (deskripsi, waktu) VALUES('$tugas','$waktu')";
         $conn->exec($sql);
     }
+    function showTugas (){
+        $sql = "SELECT * FROM tugas";
+        $conn->exec($sql);
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
