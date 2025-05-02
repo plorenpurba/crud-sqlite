@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET"){
 $listTugas = $db->showTugas();
 ?>
 
-<form action="<?= $_SERVER['SCRIPT_NAME'] ?>" method="post">
+<form action="/" method="post">
     <h2>Tugas</h2>
     <input type="text" name="tugas" required>
     <h2>Waktu</h2>
@@ -43,7 +43,8 @@ $listTugas = $db->showTugas();
     <ul>
     <?php foreach($listTugas as $t): ?>
         <li>Tugas : <?= $t['deskripsi']; ?> </li>
-        <li>waktu : <?= $t['waktu']; ?> <a href="?hapus=<?= $t['id']; ?>">Hapus</a></li>
+        <li>waktu : <?= $t['waktu']; ?> Jam <a href="?hapus=<?= $t['id']; ?>">Hapus</a> | <a href="update.php?ubah=<?= $t['id'] ?> ">Ubah</a></li>
+        <hr>
     <?php endforeach; ?>
 
     </ul>
