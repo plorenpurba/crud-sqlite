@@ -43,7 +43,8 @@ $listTugas = $db->showTugas();
     <ul>
     <?php foreach($listTugas as $t): ?>
         <li>Tugas : <?= $t['deskripsi']; ?> </li>
-        <li>waktu : <?= $t['waktu']; ?> Jam <a href="?hapus=<?= $t['id']; ?>">Hapus</a> | <a href="update.php?ubah=<?= $t['id'] ?> ">Ubah</a></li>
+        <li>waktu : <?= $t['waktu']; ?> Jam <a href="?hapus=<?= $t['id']; ?>">Hapus</a> | <a href="update.php?ubah=<?= $t['id'] ?>">Ubah</a> 
+        | <a href="tampil.php?tampil=<?= $t['id'] ?>">Lihat</a></li>
         <hr>
     <?php endforeach; ?>
 
